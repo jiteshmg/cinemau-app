@@ -1,0 +1,208 @@
+/* #root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0; 
+  text-align: left;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+  width: 100%; 
+}
+
+.read-the-docs {
+  color: #888;
+} */
+
+
+/* Combined Styles: App + Login + Registration */
+
+/* ===== Global & Layout Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* ===== Auth Container Styles ===== */
+.auth-center-container {
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.auth-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 450px;
+  height: auto;
+}
+
+/* ===== Dashboard Header Styles ===== */
+.dashboard-header__brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-header__brand img {
+  height: 50px;
+}
+
+.dashboard-header .navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.dashboard-header .navbar-brand img {
+  height: 50px;
+  margin-right: 10px;
+}
+
+.dashboard-header .nav-dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-header__divider {
+  border: 0;
+  height: 1px;
+  background-color: #333;
+  background-image: linear-gradient(to right, #ccc, #333, #ccc);
+  margin-top: 0;
+}
+
+/* ===== Form Components ===== */
+.profile-form-container {
+  padding-top: 20px;
+}
+
+.profile-form-box {
+  max-width: 4xl;
+  margin: 20px;
+}
+
+.banner {
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 20px;
+}
+
+.banner h1 {
+  color: white;
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+}
+
+/* ===== Button Styles ===== */
+.btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn {
+  background-color: #007bff;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+.register-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.register-btn:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+  margin-top: 10px;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
+}
+
+/* ===== Utility Classes ===== */
+.checkbox-label {
+  font-size: 14px;
+  color: #555;
+}
