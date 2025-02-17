@@ -12,6 +12,7 @@ import {
     FormControl,
     Button
 } from 'react-bootstrap';
+import Image from 'react-bootstrap/Image';
 import Select, {MultiValue, ActionMeta} from 'react-select';
 import '../App.css';
 
@@ -52,15 +53,24 @@ const MyProfile : React.FC < {
         setSelectedRoles] = useState < Role[] > ([]);
     const [selectedRole,
         setSelectedRole] = useState < SelectOption[] > ([]);
-    const [newRole,
-        setNewRole] = useState("");
+    
     const userVal = JSON.parse(localStorage.getItem('user') || '{}');
     const [selectedImage,
         setSelectedImage] = useState < File | null > (null);
+    const apiUrl: string = import.meta.env.VITE_API_URL;
+    const url: string = import.meta.env.VITE_URL;
+    const token = localStorage.getItem("token"); 
 
     const fetchUserData = async(userId : string) => {
         try {
-            const response = await fetch(`http://localhost:8000/api/get-user/${userId}`);
+
+            const response = await fetch(`${apiUrl}/get-user/${userId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` // Attach the token
+                }
+            });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -74,6 +84,7 @@ const MyProfile : React.FC < {
                     .roles
                     .map((role : Role) => ({value: role.id, label: role.name}));
                 setSelectedRole(formattedRoles);
+                setSelectedRoles(userData.data.roles);
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -84,14 +95,14 @@ const MyProfile : React.FC < {
 
     const fetchRoles = async() => {
         try {
-            const response = await fetch('http://localhost:8000/api/role', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Include authorization header if required 'Authorization': `Bearer
-                    // ${yourToken}`
-                }
-            });
+
+        const response = await fetch(`${apiUrl}/role`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` // Attach the token
+            }
+        });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -128,12 +139,12 @@ const MyProfile : React.FC < {
         formData.append("image", selectedImage);
     
         try {
-            const response = await fetch(`http://localhost:8000/api/update-profile-image/${user.id}`, {
+            const response = await fetch(`${apiUrl}/update-profile-image/${user.id}`, {
                 method: "POST",
                 body: formData,
                 headers: {
-                    "Accept": "application/json"
-                    // DO NOT set "Content-Type": "multipart/form-data"
+                    "Accept": "application/json",
+                    "Authorization": `Bearer ${token}` // Attach the token
                 }
             });
     
@@ -178,12 +189,13 @@ const MyProfile : React.FC < {
         };
 
         try {
-            const response = await fetch(`http://localhost:8000/api/user-update/${user.id}`, {
+            const response = await fetch(`${apiUrl}/user-update/${user.id}`, {
                 method: "PUT",
                 body: JSON.stringify(profileData),
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` // Attach the token
                 }
             });
 
@@ -227,15 +239,12 @@ const MyProfile : React.FC < {
                                         <FormLabel>Profile Image</FormLabel>
                                         <FormControl type="file" onChange={handleImageChange} accept="image/*"/>
                                     </Col>
-                                    <Col xs="9">
-                                        {user.image_path && (<img
-                                            src={`http://localhost:8000${user.image_path}`}
-                                            alt="Profile Image"
-                                            className="profile-image"
-                                            style={{
-                                            width: 'auto%',
-                                            height: '100px'
-                                        }}/>)}
+                                    <Col xs={6} md={3}>
+                                        {user.image_path && (<Image
+                                            src={`${url}${user.image_path}`}
+                                            roundedCircle
+                                            />)
+                                        }
                                     </Col>
                                 </Row>
                             </FormGroup>

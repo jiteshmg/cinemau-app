@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './cinemau-logo.png';
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import {
     Navbar,
     Nav,
@@ -20,8 +21,10 @@ const DashboardHeader : React.FC < {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const handleLogout = () => {
-        localStorage.removeItem('user');
-        navigate('/');
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        delete axios.defaults.headers.common["Authorization"]; // Remove token from headers
+        navigate("/");
     };
     return ( <> <Navbar bg="dark" variant="dark" expand="lg">
         <Container fluid>
@@ -37,19 +40,36 @@ const DashboardHeader : React.FC < {
                     thumbnail
                     style={{
                     height: '100px'
-                }}/> {user && (
-                    <div className="d-flex justify-content-end mt-3">
-                        <DropdownButton id="dropdown-basic-button" title={user.name}>
-                            <Dropdown.Item onClick={onProfileClick}>My Profile</Dropdown.Item>
-                            <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-                        </DropdownButton>
-                    </div>
-
-                )}
+                }}/>
             </Navbar.Brand>
+            <Nav className="me-auto">
+                <Nav.Link href="/projects">Projects</Nav.Link>
+                <Nav.Link href="#features">Features</Nav.Link>
+                <Nav.Link href="#pricing">Pricing</Nav.Link>
+            </Nav>
+            {user && (
 
+                <div className="d-flex justify-content-end mt-3">
+                    <Navbar.Collapse id="navbar-dark-example">
+                        <Nav>
+                            <NavDropdown
+                                id="nav-dropdown-dark-example"
+                                title={user.name}
+                                menuVariant="dark">
+                                <NavDropdown.Item onClick={onProfileClick}>My Profile</NavDropdown.Item>
+
+                                <NavDropdown.Divider/>
+                                <NavDropdown.Item onClick={handleLogout}>
+                                    Logout
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </div>
+            )}
         </Container>
-    </Navbar> < hr className = "dashboard-header__divider" /> </>);
+    </Navbar> </>);
+    
 };
 
 export default DashboardHeader;
