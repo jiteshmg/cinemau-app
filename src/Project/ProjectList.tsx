@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
+import CreateProject from '../components/CreateProject'; 
 import Select, {MultiValue, ActionMeta} from 'react-select';
 import {
     Navbar,
@@ -84,6 +85,7 @@ const ProjectList : React.FC = () => {
         setUserProjects] = useState < UserProject[] > ([]);
     const [usersByRole, setUsersByRole] = useState<User[]>([]);
     const [selectedUsers, setSelectedUsers] = useState<SelectOption[]>([]);
+    const [isCreatingProject, setIsCreatingProject] = useState(false);
   
     const handleInviteClose = () => setShowInvite(false);
     const handleInviteShow = () => setShowInvite(true);
@@ -173,7 +175,7 @@ const ProjectList : React.FC = () => {
 
     const fetchUsersByRole = async (roleId: number) => {
         try {
-            const response = await fetch(`${apiUrl}/user-role/${roleId}`, {
+            const response = await fetch(`${apiUrl}/role-user/${roleId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -247,6 +249,14 @@ const ProjectList : React.FC = () => {
         setSelectedProject(selectedProject);
     };
 
+    const handleCreateProject = () => {
+        setIsCreatingProject(true);
+    };
+
+    const handleCreateProjectCancel = () => {
+        setIsCreatingProject(false);
+      };
+
     // Convert roles to Select options format
     const roleOptions : SelectOption[] = roles.map(role => ({value: role.id, label: role.name}));
     const projectOptions : SelectProject[] = projects.map(project => ({value: project.id, label: project.title}));
@@ -278,13 +288,25 @@ const ProjectList : React.FC = () => {
     return ( <> <Row className="mt-3">
         <Col xs="6"></Col>
         <Col xs="2">
-            <Button variant="dark">Create Project</Button>
+            <Button variant="dark" onClick={handleCreateProject} >Create Project</Button>
         </Col>
-     
         <Col xs="2">
             <Button variant="dark" onClick={handleInviteShow}>Invite</Button>
         </Col>
-    </Row> < Container className = "profile-form-container" fluid > <Card className="profile-form-box">
+    </Row> < Container className = "profile-form-container" fluid > 
+    {isCreatingProject ? (
+          // Render Create Project component
+          <CreateProject 
+            onCancel={handleCreateProjectCancel} 
+            onProjectCreated={() => {
+              setIsCreatingProject(false);
+              // Optionally refresh your project list
+              fetchUserProjects();
+            }}
+          />
+        ) : (
+          // Render Project List
+    <Card className="profile-form-box">
         <Card.Body>
             <h1 className="text-2xl font-bold mb-4">My Projects</h1>
             {userProjects && (
@@ -335,7 +357,8 @@ const ProjectList : React.FC = () => {
             </Table>
             )}
         </Card.Body>
-    </Card> </Container>
+    </Card>)} 
+    </Container>
    
     <Modal show={showInvite} onHide={handleInviteClose}>
         <Modal.Header closeButton>
@@ -343,36 +366,36 @@ const ProjectList : React.FC = () => {
         <Form.Group className="mb-3">
             <Form.Label>Role</Form.Label>
             <Select
-    options={roleOptions}
-    value={selectedRole}
-    onChange={(selected) => handleRoleSelect(selected)}
-    className="relative"
-    placeholder="Select a role..."
-    isClearable
-  />
+                options={roleOptions}
+                value={selectedRole}
+                onChange={(selected) => handleRoleSelect(selected)}
+                className="relative"
+                placeholder="Select a role..."
+                isClearable
+            />
         </Form.Group>
         <Form.Group className="mb-3">
             <Form.Label>Users</Form.Label>
             <Select
-    options={userOptions}
-    value={selectedUsers}
-    onChange={handleUserSelectChange}
-    className="relative"
-    placeholder="Select users..."
-    isClearable
-    isMulti
-/>
+                options={userOptions}
+                value={selectedUsers}
+                onChange={handleUserSelectChange}
+                className="relative"
+                placeholder="Select users..."
+                isClearable
+                isMulti
+            />
         </Form.Group>
         <Form.Group className="mb-3">
             <Form.Label>Project</Form.Label>
             <Select
-    options={projectOptions}
-    value={selectedProject}
-    onChange={(selected) => handleProjectSelect(selected)}
-    className="relative"
-    placeholder="Select a project..."
-    isClearable
-  />
+                options={projectOptions}
+                value={selectedProject}
+                onChange={(selected) => handleProjectSelect(selected)}
+                className="relative"
+                placeholder="Select a project..."
+                isClearable
+            />
         </Form.Group>
     </Form> </Modal.Body>
         <Modal.Footer>

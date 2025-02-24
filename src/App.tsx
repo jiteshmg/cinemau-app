@@ -7,6 +7,7 @@ import UserRegistration from './User/UserRegistration';
 import Dashboard from './Dashboard';
 import MyProfile from "./User/MyProfile";
 import PrivateRoute from "./PrivateRoute";
+import CreateProject from './components/CreateProject';
 
 const App : React.FC = () => {
     return (
@@ -19,6 +20,7 @@ const App : React.FC = () => {
                     <Route element={< PrivateRoute />}>
                         <Route path="/dashboard" element={< Dashboard />}/>
                         <Route path="/profile" element={< MyProfile onClose={() => console.log("Closed")} />} />
+                        <Route path="/create-project" element={<CreateProject />} />
                     </Route>
                 </Routes>
             </div>

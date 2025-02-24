@@ -44,8 +44,8 @@ const DashboardHeader : React.FC < {
             </Navbar.Brand>
             <Nav className="me-auto">
                 <Nav.Link href="/projects">Projects</Nav.Link>
-                <Nav.Link href="#features">Features</Nav.Link>
-                <Nav.Link href="#pricing">Pricing</Nav.Link>
+                <Nav.Link href="#features">Schedules</Nav.Link>
+                <Nav.Link href="#pricing">Auditions</Nav.Link>
             </Nav>
             {user && (
 

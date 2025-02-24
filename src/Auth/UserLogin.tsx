@@ -22,10 +22,9 @@ const UserLogin : React.FC = () => {
     };
 
     // Handle form submission
-    const handleSubmit = async(e : React.FormEvent < HTMLFormElement >) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Form submitted:", formData);
-
+    
         try {
             const response = await axios.post(`${apiUrl}/login`, formData, {
                 headers: {
@@ -33,18 +32,19 @@ const UserLogin : React.FC = () => {
                     Accept: "application/json"
                 }
             });
-
-            // Check if login was successful
-            if (response.data.success) {
+            console.log("Form submitted:", response);
+    
+            // Check if login was successful using the 'status' field
+            if (response.data.status === "success") {
                 console.log("Login successful:", response.data);
-
-                // Store the token securely
-                localStorage.setItem("token", response.data.token);
-                localStorage.setItem("user", JSON.stringify(response.data.user));
-
+    
+                // Store the token and user data securely
+                localStorage.setItem("token", response.data.data.token);  // Note the nested 'data'
+                localStorage.setItem("user", JSON.stringify(response.data.data.user));
+    
                 // Set default Authorization header for future requests
-                axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-
+                axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.data.token}`;
+    
                 // Redirect to dashboard
                 navigate("/dashboard");
             } else {
@@ -52,14 +52,9 @@ const UserLogin : React.FC = () => {
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                // Handle API errors (Laravel validation, authentication failure, etc.)
-                console.error("Axios error:", error.response
-                    ?.data);
-                alert(error.response
-                    ?.data
-                        ?.message || "Login failed. Please try again.");
+                console.error("Axios error:", error.response?.data);
+                alert(error.response?.data?.message || "Login failed. Please try again.");
             } else {
-                // Handle unexpected JavaScript errors
                 console.error("An unexpected error occurred:", error);
                 alert("An unexpected error occurred. Please try again.");
             }
